@@ -8,10 +8,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const MONGO_URI = process.env.MONGO_URI;
-const PORT = process.env.PORT || 10000; // Using 10000 as Render assigned this port previously
+// ✅ Add this route here
+app.get("/", (req, res) => {
+    res.send("Backend running successfully!");
+});
 
-// 1. Define Schema and Model FIRST
+const MONGO_URI = process.env.MONGO_URI;
+const PORT = process.env.PORT || 10000;
+
 const DeveloperSchema = new mongoose.Schema({
     name: String,
     role: String,
@@ -21,10 +25,8 @@ const DeveloperSchema = new mongoose.Schema({
 
 const Developer = mongoose.model("Developer", DeveloperSchema);
 
-// 2. Define Routes
 app.post("/developers", async (req, res) => {
     try {
-        // Ensure connection is established before interacting with the Model
         if (mongoose.connection.readyState !== 1) {
              return res.status(503).json({ error: "Service Unavailable: Database not connected" });
         }
@@ -38,7 +40,6 @@ app.post("/developers", async (req, res) => {
 
 app.get("/developers", async (req, res) => {
     try {
-        // Ensure connection is established before interacting with the Model
         if (mongoose.connection.readyState !== 1) {
              return res.status(503).json({ error: "Service Unavailable: Database not connected" });
         }
@@ -49,15 +50,12 @@ app.get("/developers", async (req, res) => {
     }
 });
 
-// 3. Connect to Database and START Server ONLY on success
-mongoose.connect(MONGO_URI, {})
+mongoose.connect(MONGO_URI)
 .then(() => {
     console.log("MongoDB connected");
-    // CRITICAL: Start the server ONLY when the DB connection is ready
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 })
 .catch(err => {
     console.error("MongoDB connection error:", err.message);
-    // Exit the process if the database connection fails
-    process.exit(1); 
+    process.exit(1);
 });
