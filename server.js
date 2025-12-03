@@ -50,10 +50,7 @@ app.get("/developers", async (req, res) => {
 });
 
 // 3. Connect to Database and START Server ONLY on success
-mongoose.connect(MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.connect(MONGO_URI, {})
 .then(() => {
     console.log("MongoDB connected");
     // CRITICAL: Start the server ONLY when the DB connection is ready
