@@ -1,5 +1,5 @@
 const cors = require("cors");
-app.use(cors());git init
+app.use(cors());
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
